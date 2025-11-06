@@ -23,7 +23,10 @@ import { useAuth } from "../../../context/AuthContext";
 import { useThemeContext } from "../../../context/ThemeContext";
 
 export default function LoginPage() {
-  const OAPI=`http://localhost:5000/api/auth/google`
+  const API_BASE = import.meta.env.VITE_API_URL || "https://back-end-prod-meem-production.up.railway.app/api";
+const BASE_URL = `${API_BASE}/users`
+ const OAPI=`${API_BASE}/auth/google`
+ console.log(OAPI)
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -76,7 +79,7 @@ function OAuthButtons() {
     setLoading(true);
 
     try {
-      const res = await fetch("http://localhost:5000/api/users/login", {
+      const res = await fetch(`${BASE_URL}/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
