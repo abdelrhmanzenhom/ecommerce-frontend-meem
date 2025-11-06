@@ -1,6 +1,6 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
-import AboutUs from "../pages/aboutus";
+import AboutUs from "../pages/AboutUs";
 import InfoLayout from "../layout/InfoLayout";
 import ContactUs from "../pages/ContactUs";
 import ShippingAndReturns from "../pages/ShippingAndReturns";
