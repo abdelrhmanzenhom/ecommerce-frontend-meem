@@ -1,6 +1,6 @@
 import axios from "axios"
-
-const BASE_URL = "http://localhost:5000/api/orders"
+const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+const BASE_URL = `${API_BASE}/orders`
 
 export const addOrder = async (order) => {
     const pew = (await axios.post(`${BASE_URL}`, order, {
