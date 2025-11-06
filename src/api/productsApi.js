@@ -2,7 +2,8 @@ import axios from "axios";
 
 
 const API_BASE = import.meta.env.VITE_API_URL || "https://back-end-prod-meem-production.up.railway.app/api";
-const BASE_URL = `${API_BASE}/products`;
+// const BASE_URL = `${API_BASE}/products`;
+const BASE_URL = "https://back-end-prod-meem-production.up.railway.app/api/products"
 
 
 export const getAllProducts = async () => {
