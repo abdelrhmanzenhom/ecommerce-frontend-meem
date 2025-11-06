@@ -35,7 +35,8 @@ export default function ProfilePage() {
   });
   const [orders, setOrders] = useState([]);
 const [loadingOrders, setLoadingOrders] = useState(false);
-
+ const API_BASE = import.meta.env.VITE_API_URL || "https://back-end-prod-meem-production.up.railway.app/api";
+const BASE_URL = `${API_BASE}/users`
 
   const token = localStorage.getItem("token");
 
@@ -47,11 +48,13 @@ const [loadingOrders, setLoadingOrders] = useState(false);
 
     const fetchProfile = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/users/profile", {
+        const res = await fetch(`https://back-end-prod-meem-production.up.railway.app/api/users/profile`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
+
+        
 
         const data = await res.json();
         setUser(data.data?.user || data.user || data);
@@ -81,7 +84,7 @@ const [loadingOrders, setLoadingOrders] = useState(false);
     formData.append("avatar", selectedFile);
 
     const res = await fetch(
-      `http://localhost:5000/api/users/${user._id}/upload-avatar`,
+      `${BASE_URL}/${user._id}/upload-avatar`,
       {
         method: "POST",
         headers: { Authorization: `Bearer ${token}` },
@@ -124,7 +127,7 @@ const [loadingOrders, setLoadingOrders] = useState(false);
 
     try {
       const res = await fetch(
-        "http://localhost:5000/api/users/update-profile",
+        `${BASE_URL}/update-profile`,
         {
           method: "PATCH",
           headers: {
@@ -223,7 +226,7 @@ const [loadingOrders, setLoadingOrders] = useState(false);
               }}
               src={
                 user?.avatar
-                  ? `http://localhost:5000/${user.avatar}`
+                  ? `https://back-end-prod-meem-production.up.railway.app/${user.avatar}`
                   : undefined
               }
             >

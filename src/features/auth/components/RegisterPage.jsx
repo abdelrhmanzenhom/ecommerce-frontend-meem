@@ -62,7 +62,7 @@ export default function RegisterPage() {
     setLoading(true);
 
     try {
-      const res = await fetch("http://localhost:5000/api/users/signup", {
+      const res = await fetch("https://back-end-prod-meem-production.up.railway.app/api/users/signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),

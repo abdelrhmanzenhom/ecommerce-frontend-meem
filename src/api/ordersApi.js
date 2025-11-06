@@ -23,7 +23,7 @@ export const getAllOrders = async () => {
     return pew;
 }
 export const getMyOrders = async () => {
-  const res = await axios.get("http://localhost:5000/api/orders/myOrders", {
+  const res = await axios.get("https://back-end-prod-meem-production.up.railway.app/api/orders/myOrders", {
     headers: {
       "Authorization": `Bearer ${localStorage.getItem("token")}`
     }

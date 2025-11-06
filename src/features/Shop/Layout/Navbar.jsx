@@ -226,7 +226,7 @@ export default function Navbar({ onSearch }) {
             ) : (
               <div className="flex gap-4">
                 <NavLink
-                  to={"/profile"}
+                  to="/profile"
                   className={({ isActive }) =>
                     `flex items-center gap-1 hover:text-secondary dark:hover:text-primary transition-colors ${
                       isActive ? "text-secondary dark:text-primary" : ""
