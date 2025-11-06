@@ -1,4 +1,4 @@
-import UserTable from "../user/userTable";
+import UserTable from "../user/UserTable";
 
 export default function AdminUsers() {
   return (
