@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+
+
+import {  XCircle } from "lucide-react";
 import {
   Box,
   Card,
@@ -174,6 +177,7 @@ const handleCloseSnackbar = () => {
 
 
 
+
   if (loading) {
     return (
       <Box
@@ -320,53 +324,92 @@ const handleCloseSnackbar = () => {
               sx={{ mt: 2, flexWrap: "wrap" }}
             >
              {/* Image Upload Section */}
-<input
-  accept="image/*"
-  type="file"
-  style={{ display: "none" }}
-  id="avatar-upload"
-  onChange={handleImageChange}
-/>
-
-<label htmlFor="avatar-upload">
-  <Button
+{/* Avatar Upload Section */}
+<Box sx={{ mt: 2, textAlign: "center" }}>
+  {/* Avatar (Live preview if a file is selected) */}
+  <Avatar
+    src={
+      selectedFile
+        ? URL.createObjectURL(selectedFile)
+        : user?.avatar
+        ? `https://back-end-prod-meem-production.up.railway.app/${user.avatar}`
+        : undefined
+    }
+    alt="Profile"
     sx={{
-      color: mode === "light" ? "primary.light" : "primary.main",
+      width: 120,
+      height: 120,
+      mx: "auto",
+      mb: 2,
+      border: "3px solid #555",
+      boxShadow: selectedFile
+        ? "0 0 12px rgba(255, 255, 255, 0.4)"
+        : "0 0 8px rgba(0,0,0,0.2)",
+      transition: "all 0.3s ease",
     }}
-    variant="outlined"
-    component="span"
-    startIcon={<Upload />}
-  >
-    Choose Picture
-  </Button>
-</label>
+  />
 
-{selectedFile && (
-  <Box sx={{ mt: 2, textAlign: "center" }}>
-    <Typography variant="body2" sx={{ mb: 1 }}>
-      Preview:
-    </Typography>
-    <Avatar
-      src={URL.createObjectURL(selectedFile)}
-      alt="Preview"
-      sx={{
-        width: 100,
-        height: 100,
-        mx: "auto",
-        mb: 2,
-        border: "2px solid #ccc",
-      }}
-    />
-    <Button
-      variant="contained"
-      color="success"
-      startIcon={<Upload />}
-      onClick={handleUpload}
-    >
-      Save Picture
-    </Button>
-  </Box>
-)}
+  {/* File input */}
+  <input
+    accept="image/*"
+    type="file"
+    style={{ display: "none" }}
+    id="avatar-upload"
+    onChange={handleImageChange}
+  />
+
+  <Stack direction="column" spacing={1} alignItems="center">
+    <label htmlFor="avatar-upload">
+      <Button
+        variant="contained"
+        component="span"
+        startIcon={<Upload />}
+        sx={{
+          backgroundColor: "#FFD700",
+          color: "#000",
+          fontWeight: "bold",
+          "&:hover": { backgroundColor: "#FFC107" },
+        }}
+      >
+        Choose Picture
+      </Button>
+    </label>
+
+    {/* Show Save/Cancel buttons only when previewing */}
+    {selectedFile && (
+      <Stack direction="row" spacing={1}>
+        <Button
+          variant="contained"
+          color="success"
+          startIcon={<Upload />}
+          onClick={async () => {
+            await handleUpload();
+            setSelectedFile(null);
+          }}
+        >
+          Save Picture
+        </Button>
+        <Button
+          variant="outlined"
+          startIcon={<XCircle />}
+          onClick={() => setSelectedFile(null)}
+          sx={{
+            borderColor: "#aaa",
+            color: "#ddd",
+            "&:hover": {
+              borderColor: "#fff",
+              color: "#fff",
+              backgroundColor: "rgba(255,255,255,0.05)",
+            },
+          }}
+        >
+          Cancel
+        </Button>
+      </Stack>
+    )}
+  </Stack>
+</Box>
+
 
               <Stack
                 direction="row"
