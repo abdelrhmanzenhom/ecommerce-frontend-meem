@@ -132,7 +132,7 @@ const CartPage = () => {
             ) : (
               products.map((item) => (
                 <TableRow
-                  key={item.id}
+                  key={item._id}
                   sx={{
                     backgroundColor: isLight ? "#fff" : "#2b2b2b",
                     "&:hover": {
@@ -155,7 +155,7 @@ const CartPage = () => {
                       <IconButton
                         size="small"
                         color="inherit"
-                        onClick={() => decreaseQuantity(item.id)}
+                        onClick={() => decreaseQuantity(item._id)}
                       >
                         <RemoveIcon fontSize="small" />
                       </IconButton>
@@ -165,7 +165,7 @@ const CartPage = () => {
                       <IconButton
                         size="small"
                         color="inherit"
-                        onClick={() => increaseQuantity(item.id)}
+                        onClick={() => increaseQuantity(item._id)}
                       >
                         <AddIcon fontSize="small" />
                       </IconButton>
