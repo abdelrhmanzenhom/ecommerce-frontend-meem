@@ -1,11 +1,13 @@
 import { useState } from "react";
-import { Rating, TextField, Button, Box, Typography } from "@mui/material";
+import { Rating, TextField, Button, Box, Typography, Link } from "@mui/material";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { addReview } from "../../../../api/reviewsApi";
 import { useAuth } from "../../../../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 const ReviewForm = ({ product }) => {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");
   const [validationMsg, setValidationMsg] = useState("");
@@ -86,8 +88,24 @@ const ReviewForm = ({ product }) => {
         required
       />
 
-      {/* Validation Message (shows for missing fields or not logged in) */}
-      {validationMsg && (
+      {/* Show login message if not logged in */}
+      {!user && (
+        <Typography color="error" sx={{ mt: 1 }}>
+          You must{" "}
+          <Link
+            component="button"
+            variant="body2"
+            onClick={() => navigate("/auth/login")}
+            sx={{ textDecoration: "underline", color: "primary.main" }}
+          >
+            log in
+          </Link>{" "}
+          to leave a review.
+        </Typography>
+      )}
+
+      {/* Validation Message */}
+      {validationMsg && user && (
         <Typography color="error" sx={{ mt: 1 }}>
           {validationMsg}
         </Typography>
