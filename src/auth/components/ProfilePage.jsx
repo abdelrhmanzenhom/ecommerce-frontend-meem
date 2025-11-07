@@ -230,24 +230,31 @@ const handleCloseSnackbar = () => {
             }}
           >
             <Avatar
-              sx={{
-                width: 120,
-                height: 120,
-                position: "absolute",
-                bottom: -60,
-                left: "50%",
-                transform: "translateX(-50%)",
-                border: "4px solid white",
-                fontSize: 48,
-              }}
-              src={
-                user?.avatar
-                  ? `https://back-end-prod-meem-production.up.railway.app/${user.avatar}`
-                  : undefined
-              }
-            >
-              {user?.name?.[0]?.toUpperCase() || "U"}
-            </Avatar>
+  sx={{
+    width: 120,
+    height: 120,
+    position: "absolute",
+    bottom: -60,
+    left: "50%",
+    transform: "translateX(-50%)",
+    border: "4px solid white",
+    fontSize: 48,
+    transition: "all 0.3s ease",
+    boxShadow: selectedFile
+      ? "0 0 12px rgba(255,255,255,0.5)"
+      : "0 0 8px rgba(0,0,0,0.2)",
+  }}
+  src={
+    selectedFile
+      ? URL.createObjectURL(selectedFile)
+      : user?.avatar
+      ? `https://back-end-prod-meem-production.up.railway.app/${user.avatar}`
+      : undefined
+  }
+>
+  {!selectedFile && (user?.name?.[0]?.toUpperCase() || "U")}
+</Avatar>
+
           </Box>
 
           <CardContent sx={{ mt: 8, textAlign: "center" }}>
@@ -327,27 +334,7 @@ const handleCloseSnackbar = () => {
 {/* Avatar Upload Section */}
 <Box sx={{ mt: 2, textAlign: "center" }}>
   {/* Avatar (Live preview if a file is selected) */}
-  <Avatar
-    src={
-      selectedFile
-        ? URL.createObjectURL(selectedFile)
-        : user?.avatar
-        ? `https://back-end-prod-meem-production.up.railway.app/${user.avatar}`
-        : undefined
-    }
-    alt="Profile"
-    sx={{
-      width: 120,
-      height: 120,
-      mx: "auto",
-      mb: 2,
-      border: "3px solid #555",
-      boxShadow: selectedFile
-        ? "0 0 12px rgba(255, 255, 255, 0.4)"
-        : "0 0 8px rgba(0,0,0,0.2)",
-      transition: "all 0.3s ease",
-    }}
-  />
+  
 
   {/* File input */}
   <input
