@@ -3,11 +3,12 @@ import { Snackbar, Alert } from "@mui/material";
 import { jwtDecode } from "jwt-decode";
 import { getUserById } from "../api/usersApi";
 import { useNavigate } from "react-router-dom";
-
+import { useCart } from "./CartContext";
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const { resetCart } = useCart();
   const [snackbar, setSnackbar] = useState({
     open: false,
     message: "",
@@ -34,6 +35,7 @@ export const AuthProvider = ({ children }) => {
   const logout = (navigate) => {
     localStorage.removeItem("token");
     setUser(null);
+    resetCart();
     navigate("/auth/login");
     showSnackbar("Farewell, Soldier!", "info");
   };
