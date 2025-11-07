@@ -319,32 +319,55 @@ const handleCloseSnackbar = () => {
               justifyContent="center"
               sx={{ mt: 2, flexWrap: "wrap" }}
             >
-              <input
-                accept="image/*"
-                type="file"
-                style={{ display: "none" }}
-                id="avatar-upload"
-                onChange={handleImageChange}
-              />
-              <label htmlFor="avatar-upload">
-                <Button
-                  sx={{
-                    color: mode === "light" ? "primary.light" : "primary.main",
-                  }}
-                  variant="outlined"
-                  component="span"
-                  startIcon={<Upload />}
-                >
-                  Choose Picture
-                </Button>
-              </label>
-              <Button
-                variant="contained"
-                startIcon={<Upload />}
-                onClick={handleUpload}
-              >
-                Upload
-              </Button>
+             {/* Image Upload Section */}
+<input
+  accept="image/*"
+  type="file"
+  style={{ display: "none" }}
+  id="avatar-upload"
+  onChange={handleImageChange}
+/>
+
+<label htmlFor="avatar-upload">
+  <Button
+    sx={{
+      color: mode === "light" ? "primary.light" : "primary.main",
+    }}
+    variant="outlined"
+    component="span"
+    startIcon={<Upload />}
+  >
+    Choose Picture
+  </Button>
+</label>
+
+{selectedFile && (
+  <Box sx={{ mt: 2, textAlign: "center" }}>
+    <Typography variant="body2" sx={{ mb: 1 }}>
+      Preview:
+    </Typography>
+    <Avatar
+      src={URL.createObjectURL(selectedFile)}
+      alt="Preview"
+      sx={{
+        width: 100,
+        height: 100,
+        mx: "auto",
+        mb: 2,
+        border: "2px solid #ccc",
+      }}
+    />
+    <Button
+      variant="contained"
+      color="success"
+      startIcon={<Upload />}
+      onClick={handleUpload}
+    >
+      Save Picture
+    </Button>
+  </Box>
+)}
+
               <Stack
                 direction="row"
                 spacing={2}
