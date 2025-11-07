@@ -240,21 +240,45 @@ const ProductDetail = () => {
 
           {/* ===== ADD TO CART ===== */}
           <Box sx={{ display: "flex", gap: 2, mt: 3 }}>
-            <TextField
-              type="number"
-              value={quantity}
-              onChange={(e) => {
-                setQuantity(e.target.value);
-              }}
-              size="small"
-              sx={{
-                width: 70,
-                input: {
-                  color: textPrimary,
-                  backgroundColor: mode === "dark" ? "#2a2a2a" : "#fff",
-                },
-              }}
-            />
+           <Box
+  sx={{
+    display: "flex",
+    alignItems: "center",
+    gap: 1,
+    backgroundColor: mode === "dark" ? "#2a2a2a" : "#f0f0f0",
+    borderRadius: 1,
+    px: 1,
+  }}
+>
+  <Button
+    variant="text"
+    onClick={() => setQuantity((prev) => (prev > 1 ? prev - 1 : 1))}
+    sx={{
+      minWidth: 32,
+      color: mode === "dark" ? "#73ceff" : "#1976d2",
+      fontSize: "18px",
+    }}
+  >
+    −
+  </Button>
+
+  <Typography sx={{ width: 30, textAlign: "center", color: textPrimary }}>
+    {quantity}
+  </Typography>
+
+  <Button
+    variant="text"
+    onClick={() => setQuantity((prev) => prev + 1)}
+    sx={{
+      minWidth: 32,
+      color: mode === "dark" ? "#73ceff" : "#1976d2",
+      fontSize: "18px",
+    }}
+  >
+    +
+  </Button>
+</Box>
+
             <Button
               onClick={() => {
                 console.log(product);
