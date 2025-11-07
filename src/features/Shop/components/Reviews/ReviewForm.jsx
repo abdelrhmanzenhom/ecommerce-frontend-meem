@@ -8,7 +8,6 @@ const ReviewForm = ({ product }) => {
   const { user } = useAuth();
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");
-
   const [validationMsg, setValidationMsg] = useState("");
 
   const queryClient = useQueryClient();
@@ -22,37 +21,25 @@ const ReviewForm = ({ product }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    if (!user) {
+      setValidationMsg("You must log in to leave a review.");
+      return;
+    }
+
     if (rating === 0 || comment.trim() === "") {
       setValidationMsg("Please enter a valid rating and comment.");
       return;
     }
 
-    // Mutate Reviews
     const review = { user: user._id, product: product._id, comment, rating };
-    console.log("form:", review);
     addReviewMutation.mutate(review);
 
-    // Reset form
     setRating(0);
     setComment("");
+    setValidationMsg("");
   };
-if (!user) {
-    return (
-      <Box
-        sx={{
-          mt: 4,
-          p: 3,
-          border: "1px solid #e0e0e0",
-          borderRadius: 2,
-          backgroundColor: "#fafafa",
-        }}
-      >
-        <Alert severity="info">
-          You must <strong>log in</strong> to leave a review.
-        </Alert>
-      </Box>
-    );
-  }
+
   return (
     <Box
       component="form"
@@ -76,7 +63,7 @@ if (!user) {
         <Rating
           name="product-rating"
           value={rating}
-          precision={0.5} // Use 1 for simple user input, 0.5 for display
+          precision={0.5}
           onChange={(event, newValue) => {
             setRating(newValue);
             setValidationMsg("");
@@ -99,12 +86,25 @@ if (!user) {
         required
       />
 
+      {/* Validation Message (shows for missing fields or not logged in) */}
+      {validationMsg && (
+        <Typography color="error" sx={{ mt: 1 }}>
+          {validationMsg}
+        </Typography>
+      )}
+
       {/* Submit Button */}
-      <Button type="submit" variant="contained" color="primary" sx={{ mt: 2 }}>
+      <Button
+        type="submit"
+        variant="contained"
+        color="primary"
+        sx={{ mt: 2 }}
+        disabled={!user} // disable if not logged in
+      >
         Submit Review
       </Button>
-      <p className="text-red-600 mt-2">{validationMsg}</p>
     </Box>
   );
 };
+
 export default ReviewForm;
