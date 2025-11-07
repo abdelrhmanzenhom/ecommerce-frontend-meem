@@ -253,9 +253,13 @@ const ProductDetail = () => {
   <Button
     variant="text"
     onClick={() => setQuantity((prev) => (prev > 1 ? prev - 1 : 1))}
-    sx={{
+   sx={{
       minWidth: 32,
-      color: mode === "dark" ? "#73ceff" : "#1976d2",
+       Color: "primary",
+                "&:hover": {
+                  Color: "primary.light",
+                },
+     
       fontSize: "18px",
     }}
   >
@@ -269,9 +273,19 @@ const ProductDetail = () => {
   <Button
     variant="text"
     onClick={() => setQuantity((prev) => prev + 1)}
+       /* sx={{
+                backgroundColor: "primary",
+                "&:hover": {
+                  backgroundColor: "primary.light",
+                },
+              }} */
     sx={{
       minWidth: 32,
-      color: mode === "dark" ? "#73ceff" : "#1976d2",
+       Color: "primary",
+                "&:hover": {
+                  Color: "primary.light",
+                },
+     
       fontSize: "18px",
     }}
   >
