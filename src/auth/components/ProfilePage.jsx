@@ -17,6 +17,7 @@ import Navbar from "../../features/Shop/Layout/Navbar";
 import { useThemeContext } from "../../context/ThemeContext";
 import { getMyOrders } from "../../api/ordersApi";
 
+import { Snackbar, Alert } from "@mui/material";
 
 export default function ProfilePage() {
   const { mode } = useThemeContext();
@@ -35,10 +36,23 @@ export default function ProfilePage() {
   });
   const [orders, setOrders] = useState([]);
 const [loadingOrders, setLoadingOrders] = useState(false);
+const [snackbar, setSnackbar] = useState({
+  open: false,
+  message: "",
+  severity: "info",
+});
+
  const API_BASE = import.meta.env.VITE_API_URL || "https://back-end-prod-meem-production.up.railway.app/api";
 const BASE_URL = `${API_BASE}/users`
 
   const token = localStorage.getItem("token");
+const showSnackbar = (message, severity = "info") => {
+  setSnackbar({ open: true, message, severity });
+};
+
+const handleCloseSnackbar = () => {
+  setSnackbar({ ...snackbar, open: false });
+};
 
   useEffect(() => {
     if (!token) {
@@ -78,33 +92,31 @@ const BASE_URL = `${API_BASE}/users`
   };
 
   const handleUpload = async () => {
-    if (!selectedFile) return alert("Please select an image first!");
+  if (!selectedFile) {
+    showSnackbar("Please select an image first!!!", "warning");
+    return;
+  }
 
-    const formData = new FormData();
-    formData.append("avatar", selectedFile);
+  const formData = new FormData();
+  formData.append("avatar", selectedFile);
 
-    const res = await fetch(
-      `${BASE_URL}/${user._id}/upload-avatar`,
-      {
-        method: "POST",
-        headers: { Authorization: `Bearer ${token}` },
-        body: formData,
-      }
-    );
+  const res = await fetch(`${BASE_URL}/${user._id}/upload-avatar`, {
+    method: "POST",
+    headers: { Authorization: `Bearer ${token}` },
+    body: formData,
+  });
 
-    const data = await res.json();
-    if (res.ok) {
-      alert("Profile picture updated!");
-      setUser(data.data.user);
-    } else {
-      alert(data.message || "Upload failed");
-    }
-  };
+  const data = await res.json();
+  if (res.ok) {
+    showSnackbar("Profile picture updated!", "success");
+    setUser(data.data.user);
+  } else {
+    showSnackbar(data.message || "Upload failed", "error");
+  }
+};
 
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    navigate("/auth/login");
-  };
+
+ 
   const handleEditToggle = () => {
     setIsEditing(!isEditing);
   };
@@ -115,51 +127,51 @@ const BASE_URL = `${API_BASE}/users`
   };
 
   const handleSaveChanges = async () => {
-    if (!editData.name.trim() || !editData.email.trim()) {
-      alert("Name and email are required");
-      return;
-    }
+  if (!editData.name.trim() || !editData.email.trim()) {
+    showSnackbar("Name and email are required", "warning");
+    return;
+  }
 
-    if (editData.newPassword && !editData.oldPassword) {
-      alert("You must enter your old password to change it");
-      return;
-    }
+  if (editData.newPassword && !editData.oldPassword) {
+    showSnackbar("You must enter your old password to change it", "warning");
+    return;
+  }
 
-    try {
-      const res = await fetch(
-        `${BASE_URL}/update-profile`,
-        {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(editData),
-        }
-      );
+  try {
+    const res = await fetch(`${BASE_URL}/update-profile`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(editData),
+    });
 
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.message || "Failed to update");
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.message || "Failed to update");
 
-      alert("Profile updated successfully");
-      setUser(data.data.user);
-      setIsEditing(false);
-      setEditData((prev) => ({ ...prev, oldPassword: "", newPassword: "" }));
-    } catch (err) {
-      alert(err.message);
-    }
-  };
+    showSnackbar("Profile updated successfully", "success");
+    setUser(data.data.user);
+    setIsEditing(false);
+    setEditData((prev) => ({ ...prev, oldPassword: "", newPassword: "" }));
+  } catch (err) {
+    showSnackbar(err.message, "error");
+  }
+};
+
   const handleViewOrders = async () => {
   setLoadingOrders(true);
   try {
     const myOrders = await getMyOrders();
     setOrders(myOrders);
+    showSnackbar("Orders loaded successfully!", "success");
   } catch (err) {
-    alert("Failed to load orders");
+    showSnackbar("Failed to load orders", "error");
   } finally {
     setLoadingOrders(false);
   }
 };
+
 
 
   if (loading) {
@@ -425,6 +437,92 @@ const BASE_URL = `${API_BASE}/users`
           </CardContent>
         </Card>
       </Box>
+    <Snackbar
+  open={snackbar.open}
+  autoHideDuration={3000}
+  onClose={handleCloseSnackbar}
+  anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+  TransitionProps={{ appear: true }}
+>
+  <Alert
+    onClose={handleCloseSnackbar}
+    severity={snackbar.severity}
+    variant="filled"
+    iconMapping={{
+      success: (
+        <span
+          style={{
+            fontSize: "1.5rem",
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
+          ✅
+        </span>
+      ),
+      error: (
+        <span
+          style={{
+            fontSize: "1.5rem",
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
+          ❌
+        </span>
+      ),
+      warning: (
+        <span
+          style={{
+            fontSize: "1.5rem",
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
+          ⚠️
+        </span>
+      ),
+      info: (
+        <span
+          style={{
+            fontSize: "1.5rem",
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
+          ℹ️
+        </span>
+      ),
+    }}
+    sx={{
+      width: "100%",
+      borderRadius: "10px",
+      fontWeight: 600,
+      fontSize: "1rem",
+      px: 2,
+      py: 1,
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      gap: "10px",
+      color: "white",
+      boxShadow: "0px 4px 12px rgba(0,0,0,0.3)",
+      backgroundColor:
+        snackbar.severity === "success"
+          ? "#2e7d32" // green success
+          : snackbar.severity === "error"
+          ? "#d32f2f" // red error
+          : snackbar.severity === "warning"
+          ? "#ed6c02" // amber warning
+          : "#0288d1", // blue info
+    }}
+  >
+    {snackbar.message}
+  </Alert>
+</Snackbar>
+
+
+
     </>
   );
 }
