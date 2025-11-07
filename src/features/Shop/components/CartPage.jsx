@@ -38,7 +38,7 @@ const CartPage = () => {
 
     try {
       const response = await fetch(
-        `http://localhost:5000/api/create-checkout-session`,
+        `https://back-end-prod-meem-production.up.railway.app/api/create-checkout-session`,
         {
           method: "POST",
           headers,
