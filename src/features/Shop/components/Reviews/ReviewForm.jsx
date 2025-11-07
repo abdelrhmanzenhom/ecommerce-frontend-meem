@@ -36,7 +36,23 @@ const ReviewForm = ({ product }) => {
     setRating(0);
     setComment("");
   };
-
+if (!user) {
+    return (
+      <Box
+        sx={{
+          mt: 4,
+          p: 3,
+          border: "1px solid #e0e0e0",
+          borderRadius: 2,
+          backgroundColor: "#fafafa",
+        }}
+      >
+        <Alert severity="info">
+          You must <strong>log in</strong> to leave a review.
+        </Alert>
+      </Box>
+    );
+  }
   return (
     <Box
       component="form"
