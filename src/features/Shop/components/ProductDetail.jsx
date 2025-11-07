@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import {
   Box,
   Card,
@@ -10,6 +10,7 @@ import {
   ToggleButton,
   ToggleButtonGroup,
   Rating,
+  Modal,
 } from "@mui/material";
 import { useParams } from "react-router-dom";
 import { getProductBySlug } from "../../../api/productsApi";
@@ -25,6 +26,8 @@ const ProductDetail = () => {
   const [tab, setTab] = useState("description");
   const [selectedSize, setSelectedSize] = useState(null);
   const [quantity, setQuantity] = useState(1);
+  const [activeImg, setActiveImg] = useState("");
+  const [openView, setOpenView] = useState(false);
 
   const { addProduct } = useCart();
 
@@ -38,7 +41,8 @@ const ProductDetail = () => {
       }
     };
     fetchProduct();
-  }, [slug]);
+    setActiveImg(product?.thumbnail);
+  }, [slug, product?._id]);
 
   if (!product)
     return (
@@ -103,10 +107,58 @@ const ProductDetail = () => {
           transition: "background-color 0.3s ease",
         }}
       >
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: { xs: "row", md: "column" },
+            gap: 1,
+            marginRight: { xs: 0, md: 2 },
+            marginBottom: { xs: 2, md: 0 },
+          }}
+        >
+          <CardMedia
+            onClick={() => {
+              setActiveImg(product.thumbnail);
+            }}
+            component="img"
+            src={product.thumbnail}
+            sx={{
+              width: { xs: 50, md: 70 },
+              height: { xs: 60, md: 80 },
+              objectFit: "cover",
+              borderRadius: 2,
+              cursor: "pointer",
+              ...(activeImg == product.thumbnail && {
+                border: "2px solid primary",
+              }),
+            }}
+          />
+
+          {product.images?.map((image) => (
+            <CardMedia
+              onClick={() => {
+                setActiveImg(image);
+              }}
+              key={image}
+              component="img"
+              src={image}
+              sx={{
+                width: { xs: 50, md: 70 },
+                height: { xs: 60, md: 80 },
+                objectFit: "cover",
+                borderRadius: 2,
+                cursor: "pointer",
+              }}
+            />
+          ))}
+        </Box>
         {/* ===== IMAGE ===== */}
         <CardMedia
+          onClick={() => {
+            setOpenView(true);
+          }}
           component="img"
-          image={product.thumbnail || product.images?.[0]}
+          image={activeImg || product.images?.[0]}
           alt={product.name}
           sx={{
             width: { xs: "100%", md: 400 },
@@ -295,6 +347,25 @@ const ProductDetail = () => {
           </>
         )}
       </Box>
+
+      <Modal
+        open={openView}
+        onClose={() => {
+          setOpenView(false);
+        }}
+        sx={{
+          maxWidth: 600,
+          display: "flex",
+          marginX: "auto",
+          alignItems: "center",
+        }}
+      >
+        <CardMedia
+          component="img"
+          src={activeImg}
+          sx={{ ".MuiCardMedia-img": { width: "200px" } }}
+        />
+      </Modal>
     </Box>
   );
 };
