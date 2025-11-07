@@ -38,10 +38,7 @@ export default function ReviewSection({ product, textColor }) {
 
   // Calculate overall rating and number of reviews
   const numReviews = reviews.length;
-const overallRating =
-  reviews.length > 0
-    ? reviews.reduce((acc, r) => acc + r.rating, 0) / reviews.length
-    : 0;
+const overallRating =reviews.length > 0 ? reviews.reduce((acc, r) => acc + r.rating, 0) / reviews.length: 0;
   return (
     <Box sx={{ mt: 4 }}>
       {/* Review Summary */}

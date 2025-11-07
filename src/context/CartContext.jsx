@@ -67,7 +67,7 @@ export const CartProvider = ({ children }) => {
   const increaseQuantity = (id) => {
     setProducts((prev) =>
       prev.map((item) =>
-        item.id === id ? { ...item, quantity: item.quantity + 1 } : item
+        item.id === id ? { ...item, quantity: +item.quantity + 1 } : item
       )
     );
   };
@@ -76,7 +76,7 @@ export const CartProvider = ({ children }) => {
     setProducts((prev) =>
       prev.map((item) =>
         item.id === id
-          ? { ...item, quantity: item.quantity > 1 ? item.quantity - 1 : 1 }
+          ? { ...item, quantity: +item.quantity > 1 ? +item.quantity - 1 : 1 }
           : item
       )
     );
@@ -87,7 +87,7 @@ export const CartProvider = ({ children }) => {
   };
 
   const total = products.reduce(
-    (sum, item) => sum + item.price * item.quantity,
+    (sum, item) => sum + +item.price * +item.quantity,
     0
   );
 
